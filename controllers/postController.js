@@ -14,11 +14,19 @@ export const getSignedUrl = async (req, res) => {
 };
 
 // POST nuovo post
+
 export const createPost = async (req, res) => {
   try {
-    const post = new Post(req.body);
-    await post.save();
-    res.status(201).json(post);
+    let posts;
+    if (Array.isArray(req.body)) {
+      // se è un array, crea più documenti
+      posts = await Post.insertMany(req.body);
+    } else {
+      // se è un singolo oggetto
+      const post = new Post(req.body);
+      posts = await post.save();
+    }
+    res.status(201).json(posts);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Errore salvataggio post" });
