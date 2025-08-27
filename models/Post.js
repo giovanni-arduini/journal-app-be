@@ -1,15 +1,21 @@
 import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema({
+  id: Number,
+  name: String,
   media: [
     {
-      type: { type: String, enum: ["image", "video", "videoPreview"], required: true },
-      url: { type: String, required: true },
-    },
+      type: { type: String, enum: ["photo", "video"], required: true },
+      url: String,
+      videoPreview: String
+    }
   ],
   location: {
-    name: String,
-    coordinates: { lat: Number, lng: Number },
+    manual: String,
+    geo: {
+      lat: Number,
+      lng: Number
+    }
   },
   description: String,
   mood: String,
@@ -18,7 +24,7 @@ const postSchema = new mongoose.Schema({
   physical_effort: Number,
   economic_effort: Number,
   actual_expense: Number,
-  tags: [String],
+  tags: [String]
 }, { timestamps: true });
 
 export default mongoose.model("Post", postSchema);
