@@ -5,7 +5,10 @@ import { generateSignedUrl } from "../services/gcsService.js";
 export const getSignedUrl = async (req, res) => {
   try {
     const { filename, contentType } = req.query;
-    const { uploadUrl, publicUrl } = await generateSignedUrl(filename, contentType);
+    const { uploadUrl, publicUrl } = await generateSignedUrl(
+      filename,
+      contentType
+    );
     res.json({ uploadUrl, publicUrl });
   } catch (error) {
     console.error(error);
@@ -18,14 +21,10 @@ export const getSignedUrl = async (req, res) => {
 export const createPost = async (req, res) => {
   try {
     let posts;
-    if (Array.isArray(req.body)) {
-      // se è un array, crea più documenti
-      posts = await Post.insertMany(req.body);
-    } else {
-      // se è un singolo oggetto
-      const post = new Post(req.body);
-      posts = await post.save();
-    }
+
+    const post = new Post(req.body);
+    posts = await post.save();
+
     res.status(201).json(posts);
   } catch (error) {
     console.error(error);
@@ -40,5 +39,24 @@ export const getPosts = async (req, res) => {
     res.json(posts);
   } catch (error) {
     res.status(500).json({ message: "Errore recupero post" });
+  }
+};
+
+// UPDATE singolo post
+export const updatePost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const updateData = req.body;
+    const updatedPost = await Post.findByIdAndUpdate(postId, updateData, {
+      new: true,
+      runValidators: true,
+    });
+    if (!updatedPost) {
+      return res.status(404).json({ message: "Post non trovato" });
+    }
+    res.json(updatedPost);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Errore aggiornamento post" });
   }
 };
