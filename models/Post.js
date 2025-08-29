@@ -1,30 +1,41 @@
 import mongoose from "mongoose";
 
-const postSchema = new mongoose.Schema({
-  id: Number,
-  name: String,
-  media: [
-    {
-      type: { type: String, enum: ["photo", "video"], required: true },
-      url: String,
-      videoPreview: String
-    }
-  ],
-  location: {
-    manual: String,
-    geo: {
-      lat: Number,
-      lng: Number
-    }
+const PostSchema = new mongoose.Schema(
+  {
+    // id viene generato automaticamente da MongoDB
+    name: { type: String, required: true },
+    media: {
+      type: [
+        {
+          type: {
+            type: String,
+            enum: ["photo", "video", "image"],
+            required: true,
+          },
+          url: { type: String, required: true },
+          videoPreview: String,
+        },
+      ],
+      required: true,
+    },
+    location: {
+      manual: String,
+      geo: {
+        lat: Number,
+        lng: Number,
+      },
+    },
+    date: { type: Date, required: true },
+    description: { type: String, required: true },
+    mood: { type: String, required: true },
+    positive_reflection: String,
+    negative_reflection: String,
+    physical_effort: { type: Number, required: true },
+    economic_effort: { type: Number, required: true },
+    actual_expense: { type: Number, required: true },
+    tags: [String],
   },
-  description: String,
-  mood: String,
-  positive_reflection: String,
-  negative_reflection: String,
-  physical_effort: Number,
-  economic_effort: Number,
-  actual_expense: Number,
-  tags: [String]
-}, { timestamps: true });
+  { timestamps: true }
+);
 
-export default mongoose.model("Post", postSchema);
+export default mongoose.model("Post", PostSchema);
