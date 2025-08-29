@@ -1,7 +1,9 @@
 import { Storage } from "@google-cloud/storage";
+import dotenv from "dotenv";
+dotenv.config();
 
-const storage = new Storage({ keyFilename: "gcs-key.json" });
-const bucket = storage.bucket("nome-del-tuo-bucket");
+const storage = new Storage({ keyFilename: process.env.GCS_KEYFILE });
+const bucket = storage.bucket(process.env.GCS_BUCKET);
 
 export const generateSignedUrl = async (filename, contentType) => {
   const file = bucket.file(`${Date.now()}-${filename}`);
