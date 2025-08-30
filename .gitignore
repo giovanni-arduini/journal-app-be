@@ -1,3 +1,5 @@
 .env
 node_modules/
-journal-app-470508-9a96e3e9437e.json
+journal-app-470508-*.json
+# Non escludere tutti i JSON, solo quelli sensibili
+# *.json
