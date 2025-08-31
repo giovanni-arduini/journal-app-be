@@ -13,7 +13,7 @@ app.use(express.json());
 connectDB();
 
 // Routes
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.use(`/api/posts`, postRoutes);
 
 app.listen(PORT, () => console.log(`✅ Server avviato su http://localhost:${PORT}`));
